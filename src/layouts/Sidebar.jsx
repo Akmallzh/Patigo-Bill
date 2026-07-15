@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom'; // <-- Tambahkan useNavigate
 import { 
   LayoutDashboard, 
   Users, 
@@ -12,13 +12,21 @@ import {
   Wallet, 
   History, 
   UserCircle,
-  Activity
+  Activity,
+  LogOut // <-- 1. Impor icon LogOut
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAppContext } from '../context/AppContext';
 
 export function Sidebar() {
   const { role, currentUser, switchRole } = useAppContext();
+  const navigate = useNavigate(); // <-- 2. Hook untuk pindah halaman
+
+  const handleLogout = () => {
+    // Di sini nanti tempat hapus token/session jika sudah pakai serverless backend
+    // Untuk sekarang, langsung tendang ke halaman login
+    navigate('/login');
+  };
 
   const adminLinks = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
@@ -72,24 +80,45 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-slate-100">
-        <div className="flex items-center gap-3 px-4 py-3 bg-slate-50 rounded-xl mb-3 cursor-pointer hover:bg-slate-100 transition" onClick={() => switchRole(role === 'admin' ? 'anggota' : 'admin', role === 'admin' ? 2 : 1)}>
-          <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+      {/* Bagian Bawah Sidebar (Profil & Aksi) */}
+      <div className="p-4 border-t border-slate-100 bg-white sticky bottom-0">
+        {/* Toggle Switch Role */}
+        <div 
+          className="flex items-center gap-3 px-3 py-2.5 bg-slate-50 hover:bg-slate-100 rounded-xl mb-2 cursor-pointer transition border border-slate-100" 
+          onClick={() => switchRole(role === 'admin' ? 'anggota' : 'admin', role === 'admin' ? 2 : 1)}
+          title="Klik untuk simulasi ganti akun/role"
+        >
+          <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
             {currentUser.initials}
           </div>
           <div className="flex-1 overflow-hidden">
-            <h4 className="text-sm font-semibold text-slate-800 truncate">{currentUser.name}</h4>
-            <p className="text-xs text-slate-500 truncate capitalize">{role} Kelompok (Klik ganti)</p>
+            <h4 className="text-xs font-semibold text-slate-800 truncate">{currentUser.name}</h4>
+            <p className="text-[10px] text-slate-500 truncate capitalize font-medium">Role: {role} ⇄</p>
           </div>
         </div>
         
+        {/* Navigasi Pengaturan */}
         <NavLink
           to="/pengaturan"
-          className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+          className={({ isActive }) =>
+            cn(
+              "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors mb-1",
+              isActive ? "bg-slate-100 text-slate-900" : "text-slate-600 hover:bg-slate-50"
+            )
+          }
         >
-          <Settings className="w-5 h-5" />
+          <Settings className="w-5 h-5 text-slate-400" />
           Pengaturan
         </NavLink>
+
+        {/* 3. Tombol Logout Baru */}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors duration-200 text-left"
+        >
+          <LogOut className="w-5 h-5 text-red-500" />
+          Keluar Akun
+        </button>
       </div>
     </aside>
   );

@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
     "lucide-react": "^1.24.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -27,6 +29,20 @@
     "oxlint": "^1.71.0",
     "postcss": "^8.5.18",
     "tailwindcss": "^4.3.2",
-    "vite": "^8.1.1"
-  }
+    "vercel": "^56.2.0",
+    "vite": "^8.1.4"
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.",
+  "main": "postcss.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akmallzh/Patigo-Bill.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Akmallzh/Patigo-Bill/issues"
+  },
+  "homepage": "https://github.com/Akmallzh/Patigo-Bill#readme"
 }
